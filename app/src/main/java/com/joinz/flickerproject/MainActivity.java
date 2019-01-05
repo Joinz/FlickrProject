@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     GridLayoutManager layoutManager;
     rvAdapter rvAdapter;
     List<String> titles;
+    private retrofit2.Call<Response> responseCall;
 
 
     @Override
@@ -82,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         RetrofitPhotos service = retrofit.create(RetrofitPhotos.class);
-        retrofit2.Call<Response> responseGson = service.listRepos("flickr.photos.getRecent", API_KEY, "json", 1);
-        responseGson.enqueue(new retrofit2.Callback<Response>() {
+        responseCall = service.listRepos("flickr.photos.getRecent", API_KEY, "json", 1);
+        responseCall.enqueue(new retrofit2.Callback<Response>() {
             @Override
             public void onResponse(retrofit2.Call<Response> call, retrofit2.Response<Response> response) {
                 titles = new ArrayList<>();
@@ -208,6 +209,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if (setString != null) {
             handler.removeCallbacks(setString);
+        }
+        if (responseCall.isExecuted()) {
+            responseCall.cancel();
         }
     }
 }
