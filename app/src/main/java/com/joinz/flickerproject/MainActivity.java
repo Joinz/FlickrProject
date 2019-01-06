@@ -2,10 +2,12 @@ package com.joinz.flickerproject;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.google.gson.Gson;
 
@@ -38,14 +40,17 @@ public class MainActivity extends AppCompatActivity {
     //https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=10c6e8498de0f7a868c4c59af1134814&format=json&nojsoncallback=1
     public static final String API_KEY = "10c6e8498de0f7a868c4c59af1134814";
 
-    Executor executor = Executors.newSingleThreadExecutor();
+    private Executor executor = Executors.newSingleThreadExecutor();
     private Handler handler;
     private Runnable setString;
     RecyclerView rv;
-    GridLayoutManager layoutManager;
+    private GridLayoutManager layoutManager;
     rvAdapter rvAdapter;
-    List<String> titles;
+    private List<String> titles;
     private retrofit2.Call<Response> responseCall;
+    private View view;
+    private retrofit2.Callback<Response> callback;
+    private Snackbar snackbar;
 
 
     @Override
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        view = findViewById(R.id.coordinatorLayout);
         rv = findViewById(R.id.rv);
         rv.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(this, 2);
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         RetrofitPhotos service = retrofit.create(RetrofitPhotos.class);
         responseCall = service.listRepos("flickr.photos.getRecent", API_KEY, "json", 1);
-        responseCall.enqueue(new retrofit2.Callback<Response>() {
+        callback = new retrofit2.Callback<Response>() {
             @Override
             public void onResponse(retrofit2.Call<Response> call, retrofit2.Response<Response> response) {
                 titles = new ArrayList<>();
@@ -97,9 +103,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(retrofit2.Call<Response> call, Throwable t) {
-
+                snackbar = Snackbar.make(view, "Request failed", Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Try again", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                responseCall.cancel();
+                                responseCall.clone().enqueue(callback);
+                            }
+                        }).show();
             }
-        });
+        };
+        responseCall.enqueue(callback);
     }
 
     private void loadPhotosViaOkHttp() {
