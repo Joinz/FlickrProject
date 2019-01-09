@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FlickerProject</string>
+    <string name="btn_share">Share</string>
+    <string name="btn_back">Back</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.joinz.flickerproject;
+package com.joinz.flickerproject.model;
 
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
