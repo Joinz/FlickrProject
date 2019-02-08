@@ -1,8 +1,8 @@
-package com.joinz.flickerproject;
+package com.joinz.flickerproject.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Response{
+public class FlickrResponse {
 
 	@SerializedName("stat")
 	private String stat;
@@ -29,7 +29,7 @@ public class Response{
 	@Override
  	public String toString(){
 		return 
-			"Response{" + 
+			"FlickrResponse{" +
 			"stat = '" + stat + '\'' + 
 			",photos = '" + photos + '\'' + 
 			"}";
