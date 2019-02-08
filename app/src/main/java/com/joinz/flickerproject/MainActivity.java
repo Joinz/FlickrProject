@@ -30,9 +30,6 @@ import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable setString;
     RecyclerView rv;
     private GridLayoutManager layoutManager;
-    rvAdapter rvAdapter;
+    FeedRVAdapter FeedRVAdapter;
     private List<String> titles;
     private retrofit2.Call<Response> responseCall;
     private View view;
@@ -63,23 +60,13 @@ public class MainActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         layoutManager = new GridLayoutManager(this, 2);
         rv.setLayoutManager(layoutManager);
-        rvAdapter = new rvAdapter(mockTitles());
-        rv.setAdapter(rvAdapter);
+        FeedRVAdapter = new FeedRVAdapter(mockTitles());
+        rv.setAdapter(FeedRVAdapter);
 
         handler = new Handler(getMainLooper());
 //        loadPhotosViaHttpUrlConnection();
 //        loadPhotosViaOkHttp();
         loadPhotosViaRetrofit();
-    }
-
-    public interface RetrofitPhotos {
-        @GET("services/rest/")
-        retrofit2.Call<Response> listRepos(
-                @Query("method") String method,
-                @Query("api_key") String apiKey,
-                @Query("format") String format,
-                @Query("nojsoncallback") int noJsonCallback
-        );
     }
 
     private void loadPhotosViaRetrofit() {
@@ -98,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < photos.size(); i++) {
                     titles.add(photos.get(i).getTitle());
                 }
-                rvAdapter.setTitles(titles);
+                FeedRVAdapter.setTitles(titles);
             }
 
             @Override
@@ -145,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                     setString = new Runnable() {
                         @Override
                         public void run() {
-                            rvAdapter.setTitles(titles);
+                            FeedRVAdapter.setTitles(titles);
                         }
                     };
                     handler.post(setString);
@@ -185,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     setString = new Runnable() {
                         @Override
                         public void run() {
-                            rvAdapter.setTitles(titles);
+                            FeedRVAdapter.setTitles(titles);
                         }
                     };
                     handler.post(setString);

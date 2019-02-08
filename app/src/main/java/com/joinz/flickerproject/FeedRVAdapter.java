@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class rvAdapter extends RecyclerView.Adapter<rvAdapter.ViewHolder> {
+public class FeedRVAdapter extends RecyclerView.Adapter<FeedRVAdapter.ViewHolder> {
     private List<String> titles;
 
-    public rvAdapter(List<String> titles) {
+    public FeedRVAdapter(List<String> titles) {
         this.titles = titles;
     }
 
