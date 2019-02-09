@@ -68,8 +68,9 @@ public class FeedActivity extends AppCompatActivity {
                         startActivity(intent);
                     });
                     rv.setAdapter(feedAdapter);
+                } else {
+                    feedAdapter.setData(photos);
                 }
-                feedAdapter.setData(photos);
             }
 
             @Override
