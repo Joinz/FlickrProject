@@ -54,13 +54,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     }
 
     public void setData(List<PhotoItem> photos, OnPhotoClickListener listener) {
-        this.photos.addAll(photos);
+        this.photos = photos;
         this.listener = listener;
         notifyDataSetChanged();
     }
 
-    public String getUrl(PhotoItem photoItem) {
-        String url = String.format(
+    private String getUrl(PhotoItem photoItem) {
+        return String.format(
                 "https://farm%s.staticflickr.com/%s/%s_%s_%s.jpg",
                 photoItem.getFarm(),
                 photoItem.getServer(),
@@ -68,7 +68,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                 photoItem.getSecret(),
                 "n"
         );
-        return url;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

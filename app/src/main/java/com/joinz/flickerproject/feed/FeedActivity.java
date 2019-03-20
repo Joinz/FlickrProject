@@ -14,6 +14,7 @@ import com.joinz.flickerproject.model.FlickrApi;
 import com.joinz.flickerproject.model.FlickrResponse;
 import com.joinz.flickerproject.model.PhotoItem;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,6 +48,8 @@ public class FeedActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         rv.setLayoutManager(layoutManager);
+        feedAdapter = new FeedAdapter(Collections.emptyList(), listener);
+        rv.setAdapter(feedAdapter);
 
         observeTextChanges();
 //        loadPhotosViaRetrofit();
@@ -83,9 +86,9 @@ public class FeedActivity extends AppCompatActivity {
                 .subscribe(flickrResponse -> {
                     Log.d(TAG, "flickrResponseSearch");
                     List<PhotoItem> photos = flickrResponse.getPhotos().getPhoto();
-                    feedAdapter = new FeedAdapter(photos, listener);
-                    rv.setAdapter(feedAdapter);
-                    Log.d(TAG, "rv.SetAdapter()");
+                    feedAdapter.setData(photos, listener);
+//                    rv.setAdapter(feedAdapter);
+//                    Log.d(TAG, "rv.SetAdapter()");
                 }, this::showSnakeBar);
         compositeDisposable.add(flickrResponseSearch);
     }
