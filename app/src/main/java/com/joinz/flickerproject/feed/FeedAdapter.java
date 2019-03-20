@@ -1,7 +1,6 @@
 package com.joinz.flickerproject.feed;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,9 @@ import com.joinz.flickerproject.R;
 import com.joinz.flickerproject.model.PhotoItem;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.annotations.NonNull;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     private List<PhotoItem> photos;
@@ -51,13 +53,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         return photos.size();
     }
 
-    public void setData(List<PhotoItem> photos) {
-        this.photos.addAll(photos);
+    public void setData(List<PhotoItem> photos, OnPhotoClickListener listener) {
+        this.photos = photos;
+        this.listener = listener;
         notifyDataSetChanged();
     }
 
-    public String getUrl(PhotoItem photoItem) {
-        String url = String.format(
+    private String getUrl(PhotoItem photoItem) {
+        return String.format(
                 "https://farm%s.staticflickr.com/%s/%s_%s_%s.jpg",
                 photoItem.getFarm(),
                 photoItem.getServer(),
@@ -65,7 +68,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                 photoItem.getSecret(),
                 "n"
         );
-        return url;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
